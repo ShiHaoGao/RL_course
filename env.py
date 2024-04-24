@@ -18,7 +18,7 @@ class QuantumBoardEnv:
         x, y = divmod(action, 3)  # 因为action是Q值表里面的所有的动作的一维序号，所以除以三的商和余数分别代表了行数和列数
         if self.board[x, y] != 0:
             print("无效步，下一个epoch")
-            return self.board.flatten(), 0, True, {}  # 如果下的地方不为0，即有子了，所以这是一个无效步
+            return self.board.flatten(), -1, True, {}  # 如果下的地方不为0，即有子了，所以这是一个无效步
         self.board[x, y] = self.current_player  # 下的地方置为黑子
         reward, done = self.check_game_end(x, y)
         self.current_player = 0 - self.current_player  # 交换黑白子，黑子下完白子下

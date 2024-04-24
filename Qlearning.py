@@ -42,7 +42,7 @@ Q = np.zeros([3 ** 9, 9])
 ## Set learning parameters
 lr = .85  # alpha, if use value function approximation, we can ignore it
 lambd = .99  # decay factor
-num_episodes = 100
+num_episodes = 10000
 t0 = time.time()
 if args.train:
     all_episode_reward = []
@@ -51,7 +51,7 @@ if args.train:
         s = env.reset()
         rAll = 0
         ## The Q-Table learning algorithm
-        for j in range(99):
+        for j in range(5):
             if render: env.render()
             ## Choose an action by greedily (with noise) picking from Q table
             a = np.argmax(Q[s, :] + np.random.randn(1, 9) * (1. / (i + 1)))
@@ -95,15 +95,15 @@ if args.test:
         s = env.reset()
         rAll = 0
         ## The Q-Table learning algorithm
-        for j in range(99):
+        for j in range(5):
             ## Choose an action by greedily (with noise) picking from Q table
             a = np.argmax(Q[s, :])
             ## Get new state and reward from environment
-            s1, r, terminated, truncated = env.step(a)
+            s1, r, done, _= env.step(a)
             ## Update Q-Table with new knowledge
             rAll += r
             s = s1
-            if terminated is True or truncated is True:
+            if done:
                 break
         print(
             'Testing  | Episode: {}/{}  | Episode Reward: {:.4f}  | Running Time: {:.4f}'.format(

@@ -11,5 +11,5 @@ $ pip install -r requirement.txt
 ## Run
 
 ```shell
-python Qlearning.py
+python Qlearning.py --train --test
 ```
