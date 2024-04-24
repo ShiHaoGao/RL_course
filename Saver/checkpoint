@@ -1,0 +1,2 @@
+model_checkpoint_path: "/Users/liuyang/Desktop/\350\257\276\347\250\213/\347\240\224\344\270\200\344\270\213/\345\274\272\345\214\226\345\255\246\344\271\240/DQN_point_game/Saver/cnnsaver.ckpt-0"
+all_model_checkpoint_paths: "/Users/liuyang/Desktop/\350\257\276\347\250\213/\347\240\224\344\270\200\344\270\213/\345\274\272\345\214\226\345\255\246\344\271\240/DQN_point_game/Saver/cnnsaver.ckpt-0"

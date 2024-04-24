@@ -2,26 +2,39 @@ import copy
 
 import numpy as np
 
+from CnnNet import *
 
 class QuantumBoardEnv:
     def __init__(self):
         # 初始化棋盘状态，0代表没有子，1是黑子，-1是白子
-        self.board = np.zeros((3, 3), dtype=int)
+        self.board = np.zeros((4, 4), dtype=int)
         self.current_player = 1  # 黑子先下
+        self.dqn = DQN()
+        self.dqn.PlayWidthHuman()
 
     def reset(self):
-        self.board = np.zeros((3, 3), dtype=int)
+        Map.Restart()
+        self.board = np.zeros((4, 4), dtype=int)
         self.current_player = 1  # 黑子先下
         return self.state_to_int(self.board)  # 把3*3棋盘返回一个数字
 
     def step(self, action):
-        x, y = divmod(action, 3)  # 因为action是Q值表里面的所有的动作的一维序号，所以除以三的商和余数分别代表了行数和列数
+        x, y = divmod(action, 4)  # 因为action是Q值表里面的所有的动作的一维序号，所以除以三的商和余数分别代表了行数和列数
         if self.board[x, y] != 0:
-            print("无效步，下一个epoch")
+            print("无效步,下一个epoch")
             return self.board.flatten(), -1, True, {}  # 如果下的地方不为0，即有子了，所以这是一个无效步
         self.board[x, y] = self.current_player  # 下的地方置为黑子
         reward, done = self.check_game_end(x, y)
-        self.current_player = 0 - self.current_player  # 交换黑白子，黑子下完白子下
+
+        if not done:
+            x_n , y_n ,is_dqn_done = Map.dqn_input(x,y)
+    
+            self.board[x_n, y_n] = -self.current_player  # 下的地方置为白子
+            if is_dqn_done:
+                reward = -1
+                done = True
+        # 如果循环五次的话，那current_player得一直是1
+        # self.current_player = 0 - self.current_player  # 交换黑白子，黑子下完白子下
         return self.state_to_int(self.board), reward, done, {}
 
     def check_game_end(self, x, y):
@@ -55,7 +68,7 @@ class QuantumBoardEnv:
 
     @property
     def observation_space(self):
-        return {'shape': (1,), 'type': 'int', 'high': 3 ** 9 - 1, 'low': 0}
+        return {'shape': (1,), 'type': 'int', 'high': 3 ** 16 - 1, 'low': 0}
 
 
 # Example of usage
